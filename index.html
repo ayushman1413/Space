@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AdminPro - Advanced Dashboard</title>
-    <link rel="stylesheet" href="styles.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <!-- Loading Screen -->
@@ -63,11 +63,11 @@
                     <span>or</span>
                 </div>
                 <div class="social-login">
-                    <button type="button" class="social-btn google">
+                    <button type="button" class="social-btn google" onclick="socialLogin('google')">
                         <i class="fab fa-google"></i>
                         Continue with Google
                     </button>
-                    <button type="button" class="social-btn github">
+                    <button type="button" class="social-btn github" onclick="socialLogin('github')">
                         <i class="fab fa-github"></i>
                         Continue with GitHub
                     </button>
@@ -288,9 +288,9 @@
                         </div>
                         <div class="user-menu">
                             <div class="user-info" id="userMenuToggle">
-                                <img src="data:image/svg+xml,%3Csvg xmlns= width='40' height='40' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' fill='%23e5e7eb'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='Inter' font-size='14' fill='%236b7280'%3EJD%3C/text%3E%3C/svg%3E" alt="User" class="user-avatar" id="userAvatar">
+                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' fill='%23e5e7eb'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='Inter' font-size='14' fill='%236b7280'%3EJD%3C/text%3E%3C/svg%3E" alt="User" class="user-avatar" id="userAvatar">
                                 <div class="user-details">
-                                    <span class="user-name" id="userName">Ayushman</span>
+                                    <span class="user-name" id="userName">John Doe</span>
                                     <span class="user-role" id="userRole">Administrator</span>
                                 </div>
                                 <i class="fas fa-chevron-down"></i>
@@ -727,7 +727,7 @@
                         
                         <div class="table-footer">
                             <div class="table-info">
-                                <span>Showing <span id="showingStart">1</span> to <span id="showingEnd">10</span> of <span id="totalUsersTable">100</span> users</span>
+                                <span>Showing <span id="showingStart">1</span> to <span id="showingEnd">10</span> of <span id="totalUsers">100</span> users</span>
                             </div>
                             <div class="pagination">
                                 <button class="pagination-btn" id="prevPage" onclick="UserManager.goToPage(AppState.currentUserPage - 1)" disabled>
@@ -808,13 +808,261 @@
                 <div id="analyticsPage" class="page">
                     <div class="page-header">
                         <div class="page-title">
-                            <h2>Analytics</h2>
-                            <p>Detailed insights and analytics</p>
+                            <h2>Analytics Dashboard</h2>
+                            <p>Comprehensive business insights and analytics</p>
+                        </div>
+                        <div class="page-actions">
+                            <button class="btn btn-secondary" onclick="exportAnalytics()">
+                                <i class="fas fa-download"></i>
+                                Export Report
+                            </button>
+                            <button class="btn btn-primary" onclick="refreshAnalytics()">
+                                <i class="fas fa-sync-alt"></i>
+                                Refresh Data
+                            </button>
                         </div>
                     </div>
-                    <div class="analytics-content">
-                        <h3>Analytics features coming soon...</h3>
-                        <p>This section will contain detailed analytics and reporting features.</p>
+
+                    <!-- Analytics Stats -->
+                    <div class="stats-grid">
+                        <div class="stat-card primary">
+                            <div class="stat-icon">
+                                <i class="fas fa-eye"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3>Page Views</h3>
+                                <p class="stat-number" data-count="2456789">0</p>
+                                <div class="stat-change-container">
+                                    <span class="stat-change positive">
+                                        <i class="fas fa-arrow-up"></i>
+                                        +15.3%
+                                    </span>
+                                    <span class="stat-period">vs last month</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card success">
+                            <div class="stat-icon">
+                                <i class="fas fa-mouse-pointer"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3>Click Rate</h3>
+                                <p class="stat-number" data-count="4.2">0%</p>
+                                <div class="stat-change-container">
+                                    <span class="stat-change positive">
+                                        <i class="fas fa-arrow-up"></i>
+                                        +2.1%
+                                    </span>
+                                    <span class="stat-period">vs last month</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card warning">
+                            <div class="stat-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3>Conversion Rate</h3>
+                                <p class="stat-number" data-count="3.8">0%</p>
+                                <div class="stat-change-container">
+                                    <span class="stat-change negative">
+                                        <i class="fas fa-arrow-down"></i>
+                                        -0.5%
+                                    </span>
+                                    <span class="stat-period">vs last month</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card info">
+                            <div class="stat-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3>Avg. Session</h3>
+                                <p class="stat-number" data-count="4">0m 32s</p>
+                                <div class="stat-change-container">
+                                    <span class="stat-change positive">
+                                        <i class="fas fa-arrow-up"></i>
+                                        +8.7%
+                                    </span>
+                                    <span class="stat-period">vs last month</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Analytics Charts -->
+                    <div class="charts-grid">
+                        <div class="chart-card large">
+                            <div class="chart-header">
+                                <h3>Traffic Analytics</h3>
+                                <div class="chart-controls">
+                                    <select class="chart-select">
+                                        <option>Last 7 days</option>
+                                        <option selected>Last 30 days</option>
+                                        <option>Last 90 days</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="trafficChart"></canvas>
+                            </div>
+                        </div>
+                        
+                        <div class="chart-card">
+                            <div class="chart-header">
+                                <h3>Traffic Sources</h3>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="sourcesChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Analytics Tables -->
+                    <div class="dashboard-grid">
+                        <div class="dashboard-card">
+                            <div class="card-header">
+                                <h3>Top Pages</h3>
+                            </div>
+                            <div id="topPagesList" style="padding: 0;">
+                                <!-- Top pages will be populated -->
+                            </div>
+                        </div>
+
+                        <div class="dashboard-card">
+                            <div class="card-header">
+                                <h3>Device Analytics</h3>
+                            </div>
+                            <div style="padding: 24px;">
+                                <div class="metric">
+                                    <div class="metric-label">Desktop</div>
+                                    <div class="metric-value">65.4%</div>
+                                    <div class="metric-progress">
+                                        <div class="progress-bar" style="width: 65%"></div>
+                                    </div>
+                                </div>
+                                <div class="metric">
+                                    <div class="metric-label">Mobile</div>
+                                    <div class="metric-value">28.7%</div>
+                                    <div class="metric-progress">
+                                        <div class="progress-bar warning" style="width: 29%"></div>
+                                    </div>
+                                </div>
+                                <div class="metric">
+                                    <div class="metric-label">Tablet</div>
+                                    <div class="metric-value">5.9%</div>
+                                    <div class="metric-progress">
+                                        <div class="progress-bar success" style="width: 6%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Support Page -->
+                <div id="supportPage" class="page">
+                    <div class="page-header">
+                        <div class="page-title">
+                            <h2>Support Center</h2>
+                            <p>Manage customer support and tickets</p>
+                        </div>
+                        <div class="page-actions">
+                            <button class="btn btn-primary" onclick="createTicket()">
+                                <i class="fas fa-plus"></i>
+                                New Ticket
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Support Stats -->
+                    <div class="users-stats">
+                        <div class="user-stat">
+                            <div class="stat-icon">
+                                <i class="fas fa-ticket-alt"></i>
+                            </div>
+                            <div class="stat-info">
+                                <span class="stat-label">Open Tickets</span>
+                                <span class="stat-value">47</span>
+                            </div>
+                        </div>
+                        <div class="user-stat">
+                            <div class="stat-icon">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="stat-info">
+                                <span class="stat-label">Resolved Today</span>
+                                <span class="stat-value">23</span>
+                            </div>
+                        </div>
+                        <div class="user-stat">
+                            <div class="stat-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="stat-info">
+                                <span class="stat-label">Avg Response</span>
+                                <span class="stat-value">2.4h</span>
+                            </div>
+                        </div>
+                        <div class="user-stat">
+                            <div class="stat-icon">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <div class="stat-info">
+                                <span class="stat-label">Satisfaction</span>
+                                <span class="stat-value">4.8/5</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Support Tickets Table -->
+                    <div class="table-container">
+                        <div class="table-header">
+                            <div class="table-filters">
+                                <div class="filter-group">
+                                    <div class="search-input">
+                                        <i class="fas fa-search"></i>
+                                        <input type="text" placeholder="Search tickets..." id="ticketSearch">
+                                    </div>
+                                    <select class="filter-select">
+                                        <option value="">All Priorities</option>
+                                        <option value="high">High</option>
+                                        <option value="medium">Medium</option>
+                                        <option value="low">Low</option>
+                                    </select>
+                                    <select class="filter-select">
+                                        <option value="">All Status</option>
+                                        <option value="open">Open</option>
+                                        <option value="in-progress">In Progress</option>
+                                        <option value="resolved">Resolved</option>
+                                        <option value="closed">Closed</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="table-wrapper">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Ticket ID</th>
+                                        <th>Subject</th>
+                                        <th>Customer</th>
+                                        <th>Priority</th>
+                                        <th>Status</th>
+                                        <th>Created</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="ticketsTableBody">
+                                    <!-- Support tickets will be populated -->
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
 
@@ -840,221 +1088,149 @@
                                     <option value="dark">Dark</option>
                                 </select>
                             </div>
+                            <div class="form-group">
+                                <label>Language</label>
+                                <select class="form-control">
+                                    <option value="en">English</option>
+                                    <option value="es">Spanish</option>
+                                    <option value="fr">French</option>
+                                </select>
+                            </div>
                         </div>
+
+                        <div class="settings-section">
+                            <h3>Notification Settings</h3>
+                            <div class="checkbox-group">
+                                <label class="checkbox">
+                                    <input type="checkbox" checked>
+                                    <span class="checkmark"></span>
+                                    Email Notifications
+                                </label>
+                                <label class="checkbox">
+                                    <input type="checkbox" checked>
+                                    <span class="checkmark"></span>
+                                    Push Notifications
+                                </label>
+                                <label class="checkbox">
+                                    <input type="checkbox">
+                                    <span class="checkmark"></span>
+                                    SMS Notifications
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="settings-section">
+                            <h3>Security Settings</h3>
+                            <div class="form-group">
+                                <label>Two-Factor Authentication</label>
+                                <button class="btn btn-primary">Enable 2FA</button>
+                            </div>
+                            <div class="form-group">
+                                <label>Session Timeout</label>
+                                <select class="form-control">
+                                    <option value="30">30 minutes</option>
+                                    <option value="60" selected>1 hour</option>
+                                    <option value="120">2 hours</option>
+                                    <option value="480">8 hours</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Other pages placeholders -->
+                <div id="inventoryPage" class="page">
+                    <div class="page-header">
+                        <div class="page-title">
+                            <h2>Inventory Management</h2>
+                            <p>Track and manage your inventory</p>
+                        </div>
+                    </div>
+                    <div class="analytics-content">
+                        <h3>Inventory features coming soon...</h3>
+                        <p>This section will contain inventory management features.</p>
+                    </div>
+                </div>
+
+                <div id="customersPage" class="page">
+                    <div class="page-header">
+                        <div class="page-title">
+                            <h2>Customer Management</h2>
+                            <p>Manage your customer relationships</p>
+                        </div>
+                    </div>
+                    <div class="analytics-content">
+                        <h3>Customer features coming soon...</h3>
+                        <p>This section will contain customer management features.</p>
+                    </div>
+                </div>
+
+                <div id="reportsPage" class="page">
+                    <div class="page-header">
+                        <div class="page-title">
+                            <h2>Reports</h2>
+                            <p>Generate and view business reports</p>
+                        </div>
+                    </div>
+                    <div class="analytics-content">
+                        <h3>Reports features coming soon...</h3>
+                        <p>This section will contain reporting features.</p>
+                    </div>
+                </div>
+
+                <div id="financePage" class="page">
+                    <div class="page-header">
+                        <div class="page-title">
+                            <h2>Finance</h2>
+                            <p>Manage financial data and transactions</p>
+                        </div>
+                    </div>
+                    <div class="analytics-content">
+                        <h3>Finance features coming soon...</h3>
+                        <p>This section will contain financial management features.</p>
+                    </div>
+                </div>
+
+                <div id="marketingPage" class="page">
+                    <div class="page-header">
+                        <div class="page-title">
+                            <h2>Marketing</h2>
+                            <p>Manage marketing campaigns and analytics</p>
+                        </div>
+                    </div>
+                    <div class="analytics-content">
+                        <h3>Marketing features coming soon...</h3>
+                        <p>This section will contain marketing features.</p>
+                    </div>
+                </div>
+
+                <div id="profilePage" class="page">
+                    <div class="page-header">
+                        <div class="page-title">
+                            <h2>My Profile</h2>
+                            <p>Manage your personal information</p>
+                        </div>
+                    </div>
+                    <div class="analytics-content">
+                        <h3>Profile features coming soon...</h3>
+                        <p>This section will contain profile management features.</p>
+                    </div>
+                </div>
+
+                <div id="securityPage" class="page">
+                    <div class="page-header">
+                        <div class="page-title">
+                            <h2>Security</h2>
+                            <p>Manage security settings and permissions</p>
+                        </div>
+                    </div>
+                    <div class="analytics-content">
+                        <h3>Security features coming soon...</h3>
+                        <p>This section will contain security management features.</p>
                     </div>
                 </div>
             </div>
         </main>
-    </div>
-
-    <!-- User Modal -->
-    <div id="userModal" class="modal">
-        <div class="modal-content large">
-            <div class="modal-header">
-                <h3 id="userModalTitle">Add New User</h3>
-                <button class="modal-close" onclick="UserManager.hideUserModal()">&times;</button>
-            </div>
-            <form id="userForm" class="modal-form" onsubmit="UserManager.handleUserSubmit(event)">
-                <div class="form-tabs">
-                    <button type="button" class="tab-btn active" onclick="switchTab('basic')">Basic Info</button>
-                    <button type="button" class="tab-btn" onclick="switchTab('permissions')">Permissions</button>
-                    <button type="button" class="tab-btn" onclick="switchTab('preferences')">Preferences</button>
-                </div>
-                
-                <div class="tab-content active" id="basicTab">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>First Name *</label>
-                            <input type="text" id="userFirstName" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Last Name *</label>
-                            <input type="text" id="userLastName" required>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>Email Address *</label>
-                        <input type="email" id="userEmail" required>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Phone Number</label>
-                            <input type="tel" id="userPhone">
-                        </div>
-                        <div class="form-group">
-                            <label>Department</label>
-                            <select id="userDepartment">
-                                <option value="">Select Department</option>
-                                <option value="sales">Sales</option>
-                                <option value="marketing">Marketing</option>
-                                <option value="support">Support</option>
-                                <option value="development">Development</option>
-                                <option value="hr">Human Resources</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="tab-content" id="permissionsTab">
-                    <div class="form-group">
-                        <label>Role *</label>
-                        <select id="userRoleSelect" required>
-                            <option value="">Select Role</option>
-                            <option value="admin">Administrator</option>
-                            <option value="moderator">Moderator</option>
-                            <option value="user">User</option>
-                            <option value="viewer">Viewer</option>
-                        </select>
-                    </div>
-                    <div class="permissions-grid">
-                        <div class="permission-group">
-                            <h4>User Management</h4>
-                            <div class="checkbox-group">
-                                <label class="checkbox">
-                                    <input type="checkbox" name="permissions" value="users.view">
-                                    <span class="checkmark"></span>
-                                    View Users
-                                </label>
-                                <label class="checkbox">
-                                    <input type="checkbox" name="permissions" value="users.create">
-                                    <span class="checkmark"></span>
-                                    Create Users
-                                </label>
-                                <label class="checkbox">
-                                    <input type="checkbox" name="permissions" value="users.edit">
-                                    <span class="checkmark"></span>
-                                    Edit Users
-                                </label>
-                                <label class="checkbox">
-                                    <input type="checkbox" name="permissions" value="users.delete">
-                                    <span class="checkmark"></span>
-                                    Delete Users
-                                </label>
-                            </div>
-                        </div>
-                        <div class="permission-group">
-                            <h4>Product Management</h4>
-                            <div class="checkbox-group">
-                                <label class="checkbox">
-                                    <input type="checkbox" name="permissions" value="products.view">
-                                    <span class="checkmark"></span>
-                                    View Products
-                                </label>
-                                <label class="checkbox">
-                                    <input type="checkbox" name="permissions" value="products.create">
-                                    <span class="checkmark"></span>
-                                    Create Products
-                                </label>
-                                <label class="checkbox">
-                                    <input type="checkbox" name="permissions" value="products.edit">
-                                    <span class="checkmark"></span>
-                                    Edit Products
-                                </label>
-                                <label class="checkbox">
-                                    <input type="checkbox" name="permissions" value="products.delete">
-                                    <span class="checkmark"></span>
-                                    Delete Products
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="tab-content" id="preferencesTab">
-                    <div class="form-group">
-                        <label>Language</label>
-                        <select id="userLanguage">
-                            <option value="en">English</option>
-                            <option value="es">Spanish</option>
-                            <option value="fr">French</option>
-                            <option value="de">German</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Timezone</label>
-                        <select id="userTimezone">
-                            <option value="UTC">UTC</option>
-                            <option value="EST">Eastern Time</option>
-                            <option value="PST">Pacific Time</option>
-                            <option value="GMT">Greenwich Mean Time</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Notification Preferences</label>
-                        <div class="checkbox-group">
-                            <label class="checkbox">
-                                <input type="checkbox" name="notifications" value="email" checked>
-                                <span class="checkmark"></span>
-                                Email Notifications
-                            </label>
-                            <label class="checkbox">
-                                <input type="checkbox" name="notifications" value="sms">
-                                <span class="checkmark"></span>
-                                SMS Notifications
-                            </label>
-                            <label class="checkbox">
-                                <input type="checkbox" name="notifications" value="push" checked>
-                                <span class="checkmark"></span>
-                                Push Notifications
-                            </label>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="modal-actions">
-                    <button type="button" class="btn btn-secondary" onclick="UserManager.hideUserModal()">Cancel</button>
-                    <button type="submit" class="btn btn-primary">
-                        <span id="userSubmitText">Create User</span>
-                        <i class="fas fa-spinner fa-spin" id="userSubmitSpinner" style="display: none;"></i>
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Toast Notifications -->
-    <div id="toastContainer" class="toast-container"></div>
-
-    <!-- Keyboard Shortcuts Modal -->
-    <div id="shortcutsModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Keyboard Shortcuts</h3>
-                <button class="modal-close" onclick="hideKeyboardShortcuts()">&times;</button>
-            </div>
-            <div class="shortcuts-content">
-                <div class="shortcut-group">
-                    <h4>Navigation</h4>
-                    <div class="shortcut-item">
-                        <span><kbd>Ctrl</kbd> + <kbd>D</kbd></span>
-                        <span>Dashboard</span>
-                    </div>
-                    <div class="shortcut-item">
-                        <span><kbd>Ctrl</kbd> + <kbd>U</kbd></span>
-                        <span>Users</span>
-                    </div>
-                    <div class="shortcut-item">
-                        <span><kbd>Ctrl</kbd> + <kbd>P</kbd></span>
-                        <span>Products</span>
-                    </div>
-                </div>
-                <div class="shortcut-group">
-                    <h4>Actions</h4>
-                    <div class="shortcut-item">
-                        <span><kbd>Ctrl</kbd> + <kbd>N</kbd></span>
-                        <span>New Item</span>
-                    </div>
-                    <div class="shortcut-item">
-                        <span><kbd>Ctrl</kbd> + <kbd>S</kbd></span>
-                        <span>Save</span>
-                    </div>
-                    <div class="shortcut-item">
-                        <span><kbd>Esc</kbd></span>
-                        <span>Close Modal</span>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 
     <script src="script.js"></script>
