@@ -1354,13 +1354,157 @@ function checkPasswordStrength(password) {
     }
 }
 
-// Form tab switching
 function switchTab(tabName) {
     // Remove active class from all tabs and content
     document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
     document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
     
-    // Add active class to selected tab and content
-    document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
-    document.getElementById(`${tabName}Tab`).classList.add('active');
+    // Add active class to selected tab button by matching text content
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    tabButtons.forEach(btn => {
+        if (btn.textContent.trim().toLowerCase() === tabName.toLowerCase()) {
+            btn.classList.add('active');
+        }
+    });
+
+    // Add active class to selected tab content
+    const tabContent = document.getElementById(`${tabName}Tab`);
+    if (tabContent) {
+        tabContent.classList.add('active');
+    }
 }
+
+// Initialization function to set up the app
+function initializeApp() {
+    // Populate data
+    AppState.users = DataGenerator.generateUsers(50);
+    AppState.products = DataGenerator.generateProducts(20);
+    AppState.orders = DataGenerator.generateOrders(100);
+    AppState.activities = DataGenerator.generateActivities(20);
+    AppState.notifications = DataGenerator.generateNotifications(10);
+
+    // Initialize theme
+    ThemeManager.init();
+
+    // Check authentication and show appropriate page
+    if (Auth.checkAuth()) {
+        Auth.showDashboard();
+    } else {
+        Auth.showLogin();
+    }
+
+    // Hide loading screen
+    const loadingScreen = document.getElementById('loadingScreen');
+    if (loadingScreen) {
+        loadingScreen.classList.add('hidden');
+        setTimeout(() => {
+            loadingScreen.style.display = 'none';
+        }, 500);
+    }
+
+    // Attach event listeners
+
+    // Login form submit
+    const loginForm = document.getElementById('loginForm');
+    if (loginForm) {
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const rememberMe = document.getElementById('rememberMe').checked;
+            const result = await Auth.login(email, password, rememberMe);
+            if (result.success) {
+                Toast.success('Login Successful', `Welcome back, ${result.user.name}!`);
+                Auth.showDashboard();
+            } else {
+                Toast.error('Login Failed', result.error || 'Invalid credentials');
+            }
+        });
+    }
+
+    // Register form submit
+    const registerForm = document.getElementById('registerForm');
+    if (registerForm) {
+        registerForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const userData = {
+                firstName: document.getElementById('firstName').value,
+                lastName: document.getElementById('lastName').value,
+                email: document.getElementById('regEmail').value,
+                password: document.getElementById('regPassword').value,
+                confirmPassword: document.getElementById('confirmPassword').value,
+                agreeTerms: document.getElementById('agreeTerms').checked
+            };
+            if (userData.password !== userData.confirmPassword) {
+                Toast.error('Registration Failed', 'Passwords do not match');
+                return;
+            }
+            if (!userData.agreeTerms) {
+                Toast.error('Registration Failed', 'You must agree to the terms');
+                return;
+            }
+            const result = await Auth.register(userData);
+            if (result.success) {
+                Toast.success('Registration Successful', `Welcome, ${result.user.name}!`);
+                Auth.showDashboard();
+            } else {
+                Toast.error('Registration Failed', result.error || 'Unable to register');
+            }
+        });
+    }
+
+    // Logout button
+    const logoutBtn = document.getElementById('logoutBtn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            Auth.logout();
+            Toast.info('Logged Out', 'You have been logged out');
+        });
+    }
+
+    // User menu toggle
+    const userMenuToggle = document.getElementById('userMenuToggle');
+    const userDropdown = document.getElementById('userDropdown');
+    if (userMenuToggle && userDropdown) {
+        userMenuToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            userDropdown.style.display = userDropdown.style.display === 'block' ? 'none' : 'block';
+        });
+        document.addEventListener('click', () => {
+            userDropdown.style.display = 'none';
+        });
+    }
+
+    // Navigation links
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const page = link.getAttribute('data-page');
+            if (page) {
+                Navigation.navigateToPage(page);
+            }
+        });
+    });
+
+    // Sidebar toggle
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    if (sidebarToggle) {
+        sidebarToggle.addEventListener('click', toggleSidebar);
+    }
+
+    // Mobile menu button
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    if (mobileMenuBtn) {
+        mobileMenuBtn.addEventListener('click', toggleSidebar);
+    }
+
+    // Initialize Notification Manager
+    NotificationManager.init();
+
+    // Initialize Search Manager
+    SearchManager.init();
+}
+
+// Run initialization on DOMContentLoaded
+document.addEventListener('DOMContentLoaded', initializeApp);

@@ -8,9 +8,6 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/date-fns@2.29.3/index.min.js"></script>
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 </head>
 <body>
     <!-- Loading Screen -->
@@ -23,7 +20,7 @@
 
     <!-- Login Page -->
     <div id="loginPage" class="login-container">
-        <div class="login-box" data-aos="fade-up">
+        <div class="login-box">
             <div class="login-header">
                 <div class="logo-large">
                     <i class="fas fa-chart-line"></i>
@@ -37,14 +34,14 @@
                     <label for="email">Email</label>
                     <div class="input-group">
                         <i class="fas fa-envelope"></i>
-                        <input type="email" id="email" placeholder="Enter your email" required>
+                        <input type="email" id="email" placeholder="Enter your email" required value="admin@example.com">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="password">Password</label>
                     <div class="input-group">
                         <i class="fas fa-lock"></i>
-                        <input type="password" id="password" placeholder="Enter your password" required>
+                        <input type="password" id="password" placeholder="Enter your password" required value="password123">
                         <button type="button" class="password-toggle" onclick="togglePassword('password')">
                             <i class="fas fa-eye"></i>
                         </button>
@@ -84,7 +81,7 @@
 
     <!-- Register Page -->
     <div id="registerPage" class="login-container" style="display: none;">
-        <div class="login-box" data-aos="fade-up">
+        <div class="login-box">
             <div class="login-header">
                 <div class="logo-large">
                     <i class="fas fa-chart-line"></i>
@@ -121,7 +118,7 @@
                     <label for="regPassword">Password</label>
                     <div class="input-group">
                         <i class="fas fa-lock"></i>
-                        <input type="password" id="regPassword" placeholder="Create password" required>
+                        <input type="password" id="regPassword" placeholder="Create password" required oninput="checkPasswordStrength(this.value)">
                         <button type="button" class="password-toggle" onclick="togglePassword('regPassword')">
                             <i class="fas fa-eye"></i>
                         </button>
@@ -254,9 +251,11 @@
                     <button class="mobile-menu-btn" id="mobileMenuBtn">
                         <i class="fas fa-bars"></i>
                     </button>
-                    <h1 id="pageTitle">Dashboard Overview</h1>
-                    <div class="breadcrumb">
-                        <span id="breadcrumbPath">Home / Dashboard</span>
+                    <div>
+                        <h1 id="pageTitle">Dashboard Overview</h1>
+                        <div class="breadcrumb">
+                            <span id="breadcrumbPath">Home / Dashboard</span>
+                        </div>
                     </div>
                 </div>
                 <div class="header-right">
@@ -266,7 +265,7 @@
                         <div class="search-results" id="searchResults"></div>
                     </div>
                     <div class="header-actions">
-                        <button class="action-btn" id="fullscreenBtn" title="Toggle Fullscreen">
+                        <button class="action-btn" id="fullscreenBtn" title="Toggle Fullscreen" onclick="toggleFullscreen()">
                             <i class="fas fa-expand"></i>
                         </button>
                         <div class="notification-dropdown">
@@ -288,22 +287,22 @@
                             </div>
                         </div>
                         <div class="user-menu">
-                            <div class="user-info">
-                                <img src="/placeholder.svg?height=40&width=40" alt="User" class="user-avatar" id="userAvatar">
+                            <div class="user-info" id="userMenuToggle">
+                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' fill='%23e5e7eb'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='Inter' font-size='14' fill='%236b7280'%3EJD%3C/text%3E%3C/svg%3E" alt="User" class="user-avatar" id="userAvatar">
                                 <div class="user-details">
-                                    <span class="user-name" id="userName">John Doe</span>
+                                    <span class="user-name" id="userName">Ayushman</span>
                                     <span class="user-role" id="userRole">Administrator</span>
                                 </div>
                                 <i class="fas fa-chevron-down"></i>
                             </div>
-                            <div class="user-dropdown">
+                            <div class="user-dropdown" id="userDropdown">
                                 <div class="dropdown-section">
                                     <a href="#" data-page="profile"><i class="fas fa-user"></i> My Profile</a>
                                     <a href="#" data-page="settings"><i class="fas fa-cog"></i> Settings</a>
                                     <a href="#" onclick="showHelp()"><i class="fas fa-question-circle"></i> Help Center</a>
                                 </div>
                                 <div class="dropdown-section">
-                                    <a href="#" onclick="toggleTheme()"><i class="fas fa-moon"></i> Dark Mode</a>
+                                    <a href="#" onclick="toggleTheme()"><i class="fas fa-moon"></i> <span id="themeText">Dark Mode</span></a>
                                     <a href="#" onclick="showKeyboardShortcuts()"><i class="fas fa-keyboard"></i> Shortcuts</a>
                                 </div>
                                 <div class="dropdown-section">
@@ -320,7 +319,7 @@
                 <!-- Overview Page -->
                 <div id="overviewPage" class="page active">
                     <!-- Quick Actions -->
-                    <div class="quick-actions" data-aos="fade-up">
+                    <div class="quick-actions">
                         <button class="quick-action-btn" onclick="showAddUserModal()">
                             <i class="fas fa-user-plus"></i>
                             <span>Add User</span>
@@ -340,7 +339,7 @@
                     </div>
 
                     <!-- Stats Grid -->
-                    <div class="stats-grid" data-aos="fade-up" data-aos-delay="100">
+                    <div class="stats-grid">
                         <div class="stat-card primary">
                             <div class="stat-icon">
                                 <i class="fas fa-users"></i>
@@ -423,7 +422,7 @@
                     </div>
 
                     <!-- Main Charts -->
-                    <div class="charts-grid" data-aos="fade-up" data-aos-delay="200">
+                    <div class="charts-grid">
                         <div class="chart-card large">
                             <div class="chart-header">
                                 <h3>Sales Overview</h3>
@@ -463,7 +462,7 @@
                     </div>
 
                     <!-- Dashboard Grid -->
-                    <div class="dashboard-grid" data-aos="fade-up" data-aos-delay="300">
+                    <div class="dashboard-grid">
                         <!-- Recent Activity -->
                         <div class="dashboard-card">
                             <div class="card-header">
@@ -534,7 +533,7 @@
 
                 <!-- Real-time Page -->
                 <div id="realtimePage" class="page">
-                    <div class="realtime-header" data-aos="fade-up">
+                    <div class="realtime-header">
                         <h2>Real-time Dashboard</h2>
                         <div class="realtime-status">
                             <div class="status-indicator active"></div>
@@ -542,7 +541,7 @@
                         </div>
                     </div>
 
-                    <div class="realtime-grid" data-aos="fade-up" data-aos-delay="100">
+                    <div class="realtime-grid">
                         <div class="realtime-card">
                             <h3>Active Users</h3>
                             <div class="realtime-number" id="activeUsers">1,247</div>
@@ -589,7 +588,6 @@
                         <div class="realtime-card">
                             <h3>Geographic Data</h3>
                             <div class="geo-map" id="geoMap">
-                                <!-- Simplified world map visualization -->
                                 <div class="map-container">
                                     <div class="map-point" style="top: 30%; left: 20%;" data-country="USA">
                                         <div class="point-pulse"></div>
@@ -611,7 +609,7 @@
 
                 <!-- Users Page -->
                 <div id="usersPage" class="page">
-                    <div class="page-header" data-aos="fade-up">
+                    <div class="page-header">
                         <div class="page-title">
                             <h2>User Management</h2>
                             <p>Manage your users and their permissions</p>
@@ -621,21 +619,21 @@
                                 <i class="fas fa-download"></i>
                                 Export
                             </button>
-                            <button class="btn btn-primary" id="addUserBtn">
+                            <button class="btn btn-primary" id="addUserBtn" onclick="showAddUserModal()">
                                 <i class="fas fa-plus"></i>
                                 Add User
                             </button>
                         </div>
                     </div>
 
-                    <div class="users-stats" data-aos="fade-up" data-aos-delay="100">
+                    <div class="users-stats">
                         <div class="user-stat">
                             <div class="stat-icon">
                                 <i class="fas fa-users"></i>
                             </div>
                             <div class="stat-info">
                                 <span class="stat-label">Total Users</span>
-                                <span class="stat-value">12,345</span>
+                                <span class="stat-value" id="totalUsersCount">12,345</span>
                             </div>
                         </div>
                         <div class="user-stat">
@@ -644,7 +642,7 @@
                             </div>
                             <div class="stat-info">
                                 <span class="stat-label">Active Users</span>
-                                <span class="stat-value">10,234</span>
+                                <span class="stat-value" id="activeUsersCount">10,234</span>
                             </div>
                         </div>
                         <div class="user-stat">
@@ -653,7 +651,7 @@
                             </div>
                             <div class="stat-info">
                                 <span class="stat-label">New This Month</span>
-                                <span class="stat-value">1,234</span>
+                                <span class="stat-value" id="newUsersCount">1,234</span>
                             </div>
                         </div>
                         <div class="user-stat">
@@ -662,26 +660,27 @@
                             </div>
                             <div class="stat-info">
                                 <span class="stat-label">Admins</span>
-                                <span class="stat-value">23</span>
+                                <span class="stat-value" id="adminUsersCount">23</span>
                             </div>
                         </div>
                     </div>
                     
-                    <div class="table-container" data-aos="fade-up" data-aos-delay="200">
+                    <div class="table-container">
                         <div class="table-header">
                             <div class="table-filters">
                                 <div class="filter-group">
                                     <div class="search-input">
                                         <i class="fas fa-search"></i>
-                                        <input type="text" placeholder="Search users..." id="userSearch">
+                                        <input type="text" placeholder="Search users..." id="userSearch" oninput="UserManager.filterUsers()">
                                     </div>
-                                    <select id="userRole" class="filter-select">
+                                    <select id="userRole" class="filter-select" onchange="UserManager.filterUsers()">
                                         <option value="">All Roles</option>
                                         <option value="admin">Admin</option>
                                         <option value="user">User</option>
                                         <option value="moderator">Moderator</option>
+                                        <option value="viewer">Viewer</option>
                                     </select>
-                                    <select id="userStatus" class="filter-select">
+                                    <select id="userStatus" class="filter-select" onchange="UserManager.filterUsers()">
                                         <option value="">All Status</option>
                                         <option value="active">Active</option>
                                         <option value="inactive">Inactive</option>
@@ -707,7 +706,7 @@
                                     <tr>
                                         <th>
                                             <label class="checkbox">
-                                                <input type="checkbox" id="selectAll">
+                                                <input type="checkbox" id="selectAll" onchange="UserManager.toggleSelectAll()">
                                                 <span class="checkmark"></span>
                                             </label>
                                         </th>
@@ -728,16 +727,16 @@
                         
                         <div class="table-footer">
                             <div class="table-info">
-                                <span>Showing <span id="showingStart">1</span> to <span id="showingEnd">10</span> of <span id="totalUsers">100</span> users</span>
+                                <span>Showing <span id="showingStart">1</span> to <span id="showingEnd">10</span> of <span id="totalUsersTable">100</span> users</span>
                             </div>
                             <div class="pagination">
-                                <button class="pagination-btn" id="prevPage" disabled>
+                                <button class="pagination-btn" id="prevPage" onclick="UserManager.goToPage(AppState.currentUserPage - 1)" disabled>
                                     <i class="fas fa-chevron-left"></i>
                                 </button>
                                 <div class="pagination-numbers" id="paginationNumbers">
                                     <!-- Page numbers will be generated -->
                                 </div>
-                                <button class="pagination-btn" id="nextPage">
+                                <button class="pagination-btn" id="nextPage" onclick="UserManager.goToPage(AppState.currentUserPage + 1)">
                                     <i class="fas fa-chevron-right"></i>
                                 </button>
                             </div>
@@ -745,7 +744,105 @@
                     </div>
                 </div>
 
-                <!-- Add more pages here... -->
+                <!-- Products Page -->
+                <div id="productsPage" class="page">
+                    <div class="page-header">
+                        <div class="page-title">
+                            <h2>Product Management</h2>
+                            <p>Manage your product catalog</p>
+                        </div>
+                        <div class="page-actions">
+                            <button class="btn btn-secondary" onclick="exportProducts()">
+                                <i class="fas fa-download"></i>
+                                Export
+                            </button>
+                            <button class="btn btn-primary" onclick="showAddProductModal()">
+                                <i class="fas fa-plus"></i>
+                                Add Product
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="products-grid" id="productsGrid">
+                        <!-- Products will be populated by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Orders Page -->
+                <div id="ordersPage" class="page">
+                    <div class="page-header">
+                        <div class="page-title">
+                            <h2>Order Management</h2>
+                            <p>Track and manage customer orders</p>
+                        </div>
+                        <div class="page-actions">
+                            <button class="btn btn-secondary" onclick="exportOrders()">
+                                <i class="fas fa-download"></i>
+                                Export
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <div class="table-wrapper">
+                            <table class="data-table" id="ordersTable">
+                                <thead>
+                                    <tr>
+                                        <th>Order ID</th>
+                                        <th>Customer</th>
+                                        <th>Date</th>
+                                        <th>Total</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="ordersTableBody">
+                                    <!-- Orders will be populated by JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Analytics Page -->
+                <div id="analyticsPage" class="page">
+                    <div class="page-header">
+                        <div class="page-title">
+                            <h2>Analytics</h2>
+                            <p>Detailed insights and analytics</p>
+                        </div>
+                    </div>
+                    <div class="analytics-content">
+                        <h3>Analytics features coming soon...</h3>
+                        <p>This section will contain detailed analytics and reporting features.</p>
+                    </div>
+                </div>
+
+                <!-- Settings Page -->
+                <div id="settingsPage" class="page">
+                    <div class="page-header">
+                        <div class="page-title">
+                            <h2>Settings</h2>
+                            <p>Configure your application settings</p>
+                        </div>
+                    </div>
+                    <div class="settings-content">
+                        <div class="settings-section">
+                            <h3>General Settings</h3>
+                            <div class="form-group">
+                                <label>Application Name</label>
+                                <input type="text" value="AdminPro" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label>Theme</label>
+                                <select class="form-control" onchange="ThemeManager.setTheme(this.value)">
+                                    <option value="light">Light</option>
+                                    <option value="dark">Dark</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </main>
     </div>
@@ -755,13 +852,13 @@
         <div class="modal-content large">
             <div class="modal-header">
                 <h3 id="userModalTitle">Add New User</h3>
-                <button class="modal-close" onclick="hideUserModal()">&times;</button>
+                <button class="modal-close" onclick="UserManager.hideUserModal()">&times;</button>
             </div>
-            <form id="userForm" class="modal-form">
+            <form id="userForm" class="modal-form" onsubmit="UserManager.handleUserSubmit(event)">
                 <div class="form-tabs">
-                    <button type="button" class="tab-btn active" data-tab="basic">Basic Info</button>
-                    <button type="button" class="tab-btn" data-tab="permissions">Permissions</button>
-                    <button type="button" class="tab-btn" data-tab="preferences">Preferences</button>
+                    <button type="button" class="tab-btn active" onclick="switchTab('basic')">Basic Info</button>
+                    <button type="button" class="tab-btn" onclick="switchTab('permissions')">Permissions</button>
+                    <button type="button" class="tab-btn" onclick="switchTab('preferences')">Preferences</button>
                 </div>
                 
                 <div class="tab-content active" id="basicTab">
@@ -792,17 +889,8 @@
                                 <option value="marketing">Marketing</option>
                                 <option value="support">Support</option>
                                 <option value="development">Development</option>
+                                <option value="hr">Human Resources</option>
                             </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>Profile Picture</label>
-                        <div class="file-upload">
-                            <input type="file" id="userAvatar" accept="image/*">
-                            <div class="file-upload-area">
-                                <i class="fas fa-cloud-upload-alt"></i>
-                                <span>Click to upload or drag and drop</span>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -821,49 +909,53 @@
                     <div class="permissions-grid">
                         <div class="permission-group">
                             <h4>User Management</h4>
-                            <label class="checkbox">
-                                <input type="checkbox" name="permissions" value="users.view">
-                                <span class="checkmark"></span>
-                                View Users
-                            </label>
-                            <label class="checkbox">
-                                <input type="checkbox" name="permissions" value="users.create">
-                                <span class="checkmark"></span>
-                                Create Users
-                            </label>
-                            <label class="checkbox">
-                                <input type="checkbox" name="permissions" value="users.edit">
-                                <span class="checkmark"></span>
-                                Edit Users
-                            </label>
-                            <label class="checkbox">
-                                <input type="checkbox" name="permissions" value="users.delete">
-                                <span class="checkmark"></span>
-                                Delete Users
-                            </label>
+                            <div class="checkbox-group">
+                                <label class="checkbox">
+                                    <input type="checkbox" name="permissions" value="users.view">
+                                    <span class="checkmark"></span>
+                                    View Users
+                                </label>
+                                <label class="checkbox">
+                                    <input type="checkbox" name="permissions" value="users.create">
+                                    <span class="checkmark"></span>
+                                    Create Users
+                                </label>
+                                <label class="checkbox">
+                                    <input type="checkbox" name="permissions" value="users.edit">
+                                    <span class="checkmark"></span>
+                                    Edit Users
+                                </label>
+                                <label class="checkbox">
+                                    <input type="checkbox" name="permissions" value="users.delete">
+                                    <span class="checkmark"></span>
+                                    Delete Users
+                                </label>
+                            </div>
                         </div>
                         <div class="permission-group">
                             <h4>Product Management</h4>
-                            <label class="checkbox">
-                                <input type="checkbox" name="permissions" value="products.view">
-                                <span class="checkmark"></span>
-                                View Products
-                            </label>
-                            <label class="checkbox">
-                                <input type="checkbox" name="permissions" value="products.create">
-                                <span class="checkmark"></span>
-                                Create Products
-                            </label>
-                            <label class="checkbox">
-                                <input type="checkbox" name="permissions" value="products.edit">
-                                <span class="checkmark"></span>
-                                Edit Products
-                            </label>
-                            <label class="checkbox">
-                                <input type="checkbox" name="permissions" value="products.delete">
-                                <span class="checkmark"></span>
-                                Delete Products
-                            </label>
+                            <div class="checkbox-group">
+                                <label class="checkbox">
+                                    <input type="checkbox" name="permissions" value="products.view">
+                                    <span class="checkmark"></span>
+                                    View Products
+                                </label>
+                                <label class="checkbox">
+                                    <input type="checkbox" name="permissions" value="products.create">
+                                    <span class="checkmark"></span>
+                                    Create Products
+                                </label>
+                                <label class="checkbox">
+                                    <input type="checkbox" name="permissions" value="products.edit">
+                                    <span class="checkmark"></span>
+                                    Edit Products
+                                </label>
+                                <label class="checkbox">
+                                    <input type="checkbox" name="permissions" value="products.delete">
+                                    <span class="checkmark"></span>
+                                    Delete Products
+                                </label>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -910,7 +1002,7 @@
                 </div>
                 
                 <div class="modal-actions">
-                    <button type="button" class="btn btn-secondary" onclick="hideUserModal()">Cancel</button>
+                    <button type="button" class="btn btn-secondary" onclick="UserManager.hideUserModal()">Cancel</button>
                     <button type="submit" class="btn btn-primary">
                         <span id="userSubmitText">Create User</span>
                         <i class="fas fa-spinner fa-spin" id="userSubmitSpinner" style="display: none;"></i>
@@ -934,30 +1026,30 @@
                 <div class="shortcut-group">
                     <h4>Navigation</h4>
                     <div class="shortcut-item">
-                        <kbd>Ctrl</kbd> + <kbd>D</kbd>
+                        <span><kbd>Ctrl</kbd> + <kbd>D</kbd></span>
                         <span>Dashboard</span>
                     </div>
                     <div class="shortcut-item">
-                        <kbd>Ctrl</kbd> + <kbd>U</kbd>
+                        <span><kbd>Ctrl</kbd> + <kbd>U</kbd></span>
                         <span>Users</span>
                     </div>
                     <div class="shortcut-item">
-                        <kbd>Ctrl</kbd> + <kbd>P</kbd>
+                        <span><kbd>Ctrl</kbd> + <kbd>P</kbd></span>
                         <span>Products</span>
                     </div>
                 </div>
                 <div class="shortcut-group">
                     <h4>Actions</h4>
                     <div class="shortcut-item">
-                        <kbd>Ctrl</kbd> + <kbd>N</kbd>
+                        <span><kbd>Ctrl</kbd> + <kbd>N</kbd></span>
                         <span>New Item</span>
                     </div>
                     <div class="shortcut-item">
-                        <kbd>Ctrl</kbd> + <kbd>S</kbd>
+                        <span><kbd>Ctrl</kbd> + <kbd>S</kbd></span>
                         <span>Save</span>
                     </div>
                     <div class="shortcut-item">
-                        <kbd>Esc</kbd>
+                        <span><kbd>Esc</kbd></span>
                         <span>Close Modal</span>
                     </div>
                 </div>
