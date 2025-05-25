@@ -1286,16 +1286,20 @@ const SearchManager = {
 // Form Handlers
 function handleLogin(event) {
     event.preventDefault();
+    console.log('handleLogin called');
     
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
+    console.log(`Login attempt with email: ${email}`);
     
     const result = AuthManager.login(email, password);
     
     if (result.success) {
+        console.log('Login successful');
         showDashboard();
         ToastManager.show('Welcome back!', 'success');
     } else {
+        console.log('Login failed:', result.message);
         ToastManager.show(result.message, 'error');
     }
 }
@@ -1372,6 +1376,7 @@ function showRegisterPage() {
 }
 
 function showDashboard() {
+    console.log('showDashboard called');
     document.getElementById('loginPage').style.display = 'none';
     document.getElementById('registerPage').style.display = 'none';
     document.getElementById('dashboard').style.display = 'flex';
@@ -1517,13 +1522,15 @@ function handleEditUser(event, userId) {
     document.getElementById('editUserModal').remove();
 }
 
-// Initialization function to set up the app on page load
 function initApp() {
+    console.log('initApp called');
     ThemeManager.init();
 
     if (AuthManager.checkAuth()) {
+        console.log('User authenticated, showing dashboard');
         showDashboard();
     } else {
+        console.log('User not authenticated, showing login page');
         showLoginPage();
     }
 
@@ -1532,21 +1539,36 @@ function initApp() {
     // Attach form event listeners
     const loginForm = document.getElementById('loginForm');
     if (loginForm) {
-        loginForm.addEventListener('submit', handleLogin);
+        loginForm.addEventListener('submit', (event) => {
+            console.log('Login form submitted');
+            handleLogin(event);
+        });
     }
 
     const registerForm = document.getElementById('registerForm');
     if (registerForm) {
-        registerForm.addEventListener('submit', handleRegister);
+        registerForm.addEventListener('submit', (event) => {
+            console.log('Register form submitted');
+            handleRegister(event);
+        });
     }
 
     const forgotPasswordForm = document.getElementById('forgotPasswordForm');
     if (forgotPasswordForm) {
-        forgotPasswordForm.addEventListener('submit', handleForgotPassword);
+        forgotPasswordForm.addEventListener('submit', (event) => {
+            console.log('Forgot password form submitted');
+            handleForgotPassword(event);
+        });
+    }
+
+    // Hide loading screen after initialization
+    const loadingScreen = document.getElementById('loadingScreen');
+    if (loadingScreen) {
+        loadingScreen.classList.add('hidden');
+        console.log('Loading screen hidden');
     }
 }
 
-// Run initApp when DOM is fully loaded
 document.addEventListener('DOMContentLoaded', initApp);
 
     
