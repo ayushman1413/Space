@@ -283,16 +283,16 @@ const NavigationManager = {
         const userMenuToggle = document.getElementById('userMenuToggle');
         const userDropdown = document.getElementById('userDropdown');
         
-        if (userMenuToggle && userDropdown) {
-            userMenuToggle.addEventListener('click', (e) => {
-                e.stopPropagation();
-                userDropdown.style.display = userDropdown.style.display === 'block' ? 'none' : 'block';
-            });
+            if (userMenuToggle && userDropdown) {
+                userMenuToggle.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    userDropdown.classList.toggle('active');
+                });
 
-            document.addEventListener('click', () => {
-                userDropdown.style.display = 'none';
-            });
-        }
+                document.addEventListener('click', () => {
+                    userDropdown.classList.remove('active');
+                });
+            }
 
         // Notification dropdown
         const notificationBtn = document.getElementById('notificationBtn');
